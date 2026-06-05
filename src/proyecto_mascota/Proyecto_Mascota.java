@@ -48,13 +48,17 @@ public class Proyecto_Mascota {
             System.out.println("4. Pajaro");
             System.out.println("5. Perro");
 
-            int op;
+            int op=0;
             Scanner scan= new Scanner(System.in);
             if(scan.hasNextInt()){
                     op=scan.nextInt();
             }else{
                 System.out.println("No es un numero entero");
                 scan.next();
+            }
+            if (op==1) {
+                System.out.println("Elegiste al Armadillo");
+                
             }
                
         }
