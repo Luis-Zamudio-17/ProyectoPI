@@ -59,6 +59,7 @@ public class Proyecto_Mascota {
             if (op==1) {
                 System.out.println("Elegiste al Armadillo");
                 System.out.println("Genial!");
+                System.out.println("Has adoptado una nueva mascota");
                 
             }
                
