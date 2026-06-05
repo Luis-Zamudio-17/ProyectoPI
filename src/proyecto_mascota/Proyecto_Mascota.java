@@ -56,12 +56,6 @@ public class Proyecto_Mascota {
                 System.out.println("No es un numero entero");
                 scan.next();
             }
-            if (op==1) {
-                System.out.println("Elegiste al Armadillo");
-                System.out.println("Genial!");
-                System.out.println("Has adoptado una nueva mascota");
-                
-            }
                
         }
         if (opc==2) {
