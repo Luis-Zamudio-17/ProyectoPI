@@ -56,6 +56,35 @@ public class Proyecto_Mascota {
                 System.out.println("No es un numero entero");
                 scan.next();
             }
+            if (op==1) {
+                Scanner ar = new Scanner(System.in);
+                Armadillo arma= new Armadillo(null,"Armadillo",45,"Insectos",15,"Coraza de metal");
+                
+                System.out.println("Genial!!, has adoptado al armadillo");
+                System.out.println("Que nombre te gustaria darle?");
+                String nombree = ar.nextLine();
+                arma.setNombre(nombree);
+                
+                System.out.println("Excelente, aqui estan los datos de tu nuevo amigo:");
+                System.out.println("Nombre: "+arma.getNombre()+"\n"+"Especie: "+ arma.getEspecie() + "\n"
+                        +"Nivel de agresividad: "+ arma.getAgresividad()+ "\n"+ "Especificaciones de su dieta: " + arma.getDieta()+"\n"
+                        +"Años de vida: "+arma.getAniosVida()+"\n"+"Habilidad especial: "+arma.getHabilidad());
+            }
+            if (op==2) {
+                Scanner de = new Scanner(System.in);
+                Delfin del = new Delfin(null,"Delfin",20,"Sardinas",30,"Lanza chorro de agua");
+                
+                System.out.println("Genial!!, has adoptado un delfin");
+                System.out.println("Que nombre te gustaria darle?");
+                String nombree = de.nextLine();
+                del.setNombre(nombree);
+                
+                System.out.println("Excelente, aqui estan los datos de tu nuevo amigo:");
+                System.out.println("Nombre: "+del.getNombre()+"\n"+"Especie: "+ del.getEspecie() + "\n"
+                        +"Nivel de agresividad: "+ del.getAgresividad()+ "\n"+ "Especificaciones de su dieta: " + del.getDieta()+"\n"
+                        +"Años de vida: "+del.getAniosVida()+"\n"+"Habilidad especial: "+del.getHabilidad());
+                
+            }
                
         }
         if (opc==2) {
