@@ -1,5 +1,5 @@
 package proyecto_mascota;
-public abstract class mascota {
+public class Mascota {
     protected String nombre;
     protected String especie;
     protected int agresividad;
@@ -7,11 +7,10 @@ public abstract class mascota {
     protected int aniosVida;
     protected String habilidad;
 
-    public mascota() {
+    public Mascota() {
     }
-    
 
-    public mascota(String nombre, String especie, int agresividad, String dieta, int aniosVida, String habilidad) {
+    public Mascota(String nombre, String especie, int agresividad, String dieta, int aniosVida, String habilidad) {
         this.nombre = nombre;
         this.especie = especie;
         this.agresividad = agresividad;
@@ -20,5 +19,8 @@ public abstract class mascota {
         this.habilidad = habilidad;
     }
     
+    public String getEspecie(){
+        return especie;
+    }
     
 }
