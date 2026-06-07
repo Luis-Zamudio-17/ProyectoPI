@@ -60,7 +60,7 @@ public class Oso extends Mascota implements Habilidad, Jugar, Alimentar, Bañar{
     
     @Override
     public void Jugar() {
-        JOptionPane.showMessageDialog(null, "Correr","Oso",JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Montar y paser por el bosque","Oso",JOptionPane.INFORMATION_MESSAGE);
     }
     
     @Override
