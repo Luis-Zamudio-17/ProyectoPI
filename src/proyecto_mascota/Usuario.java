@@ -1,21 +1,21 @@
 package proyecto_mascota;
+import java.util.ArrayList;
+import java.util.List;
 public class Usuario {
     protected String name;
     protected int edad;
-    protected String mascota;
     protected String estadoMascota;
+    protected ArrayList<Mascota> mascotas = new ArrayList<>();
 
     public Usuario() {
     }
 
-    public Usuario(String name, int edad, String mascota, String estadoMascota) {
+    public Usuario(String name, int edad, String estadoMascota) {
         this.name = name;
         this.edad = edad;
-        this.mascota = mascota;
         this.estadoMascota = estadoMascota;
     }
 
-    
     public String getName() {
         return name;
     }
@@ -32,14 +32,6 @@ public class Usuario {
         this.edad = edad;
     }
 
-    public String getMascota() {
-        return mascota;
-    }
-
-    public void setMascota(String mascota) {
-        this.mascota = mascota;
-    }
-
     public String getEstadoMascota() {
         return estadoMascota;
     }
@@ -48,8 +40,12 @@ public class Usuario {
         this.estadoMascota = estadoMascota;
     }
 
-    
-    
-    
-    
+    public ArrayList<Mascota> getMascotas() {
+        return mascotas;
+    }
+
+    public void agregarMascota(Mascota mascota) {
+        mascotas.add(mascota);
+    }
+   
 }

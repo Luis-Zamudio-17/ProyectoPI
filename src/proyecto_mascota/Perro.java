@@ -2,7 +2,7 @@ package proyecto_mascota;
 
 import javax.swing.JOptionPane;
 
-public class Perro extends mascota implements Habilidad, Jugar, Alimentar, Bañar{
+public class Perro extends Mascota implements Habilidad, Jugar, Alimentar, Bañar{
 
     public Perro() {
     }
@@ -19,6 +19,7 @@ public class Perro extends mascota implements Habilidad, Jugar, Alimentar, Baña
         this.nombre = nombre;
     }
 
+    @Override
     public String getEspecie() {
         return especie;
     }

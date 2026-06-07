@@ -1,6 +1,6 @@
 package proyecto_mascota;
 import javax.swing.JOptionPane;
-public class Oso extends mascota implements Habilidad, Jugar, Alimentar, Bañar{
+public class Oso extends Mascota implements Habilidad, Jugar, Alimentar, Bañar{
 
     public Oso() {
     }
@@ -17,6 +17,7 @@ public class Oso extends mascota implements Habilidad, Jugar, Alimentar, Bañar{
         this.nombre = nombre;
     }
 
+    @Override
     public String getEspecie() {
         return especie;
     }

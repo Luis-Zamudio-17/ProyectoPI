@@ -1,6 +1,6 @@
 package proyecto_mascota;
 import javax.swing.JOptionPane;
-public class Armadillo extends mascota implements Habilidad, Jugar, Alimentar, Bañar {
+public class Armadillo extends Mascota implements Habilidad, Jugar, Alimentar, Bañar {
 
     public Armadillo() {
     }
@@ -17,6 +17,7 @@ public class Armadillo extends mascota implements Habilidad, Jugar, Alimentar, B
         this.nombre = nombre;
     }
 
+    @Override
     public String getEspecie() {
         return especie;
     }
