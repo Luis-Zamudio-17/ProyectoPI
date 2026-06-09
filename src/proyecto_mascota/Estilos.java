@@ -39,7 +39,10 @@ public class Estilos {
     public static final String PREGUNTA = AMARILLO_B+ " [?]  " + RESET;
     public static final String ERROR    = ROJO_B    + " [!!] " + RESET;
  
-    // Centrar texto dentro de la caja (44 chars)
+    // Limpiar pantalla
+    public static void limpiar() {
+        for (int i = 0; i < 40; i++) System.out.println();
+    }
     public static String centrar(String texto) {
         // Eliminar codigos ANSI para calcular longitud real
         String limpio = texto.replaceAll("\u001B\\[[;\\d]*m", "");
@@ -50,4 +53,3 @@ public class Estilos {
         return MAGENTA + "=" + RESET + pad + texto + pad + MAGENTA + "=" + RESET;
     }
 }
- 

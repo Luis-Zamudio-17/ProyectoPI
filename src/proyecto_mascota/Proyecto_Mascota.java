@@ -7,11 +7,21 @@ public class Proyecto_Mascota {
  
     static final Scanner sc = new Scanner(System.in);
  
+    // Descarta cualquier linea residual que haya quedado en el buffer
+    private static void limpiarBuffer() {
+        try {
+            while (System.in.available() > 0) {
+                System.in.read();
+            }
+        } catch (Exception ignored) {}
+    }
+ 
     // Lee un entero con try-catch, repite si la entrada no es valida
     private static int leerEntero() {
         while (true) {
             try {
                 String linea = sc.nextLine().trim();
+                if (linea.isEmpty()) continue;          // ignorar Enters vacios
                 return Integer.parseInt(linea);
             } catch (NumberFormatException e) {
                 System.out.println(Estilos.ERROR + Estilos.ROJO_B + " Ingresa solo un numero entero." + Estilos.RESET);
@@ -43,7 +53,8 @@ public class Proyecto_Mascota {
         while (true) {
             try {
                 System.out.print(Estilos.INFO + Estilos.CIAN_B + " Introduce tu edad:  " + Estilos.RESET);
-                ed = Integer.parseInt(sc.nextLine().trim());
+                String linea = sc.nextLine().trim();
+                ed = Integer.parseInt(linea);
                 if (ed <= 0) throw new NumberFormatException();
                 break;
             } catch (NumberFormatException e) {
@@ -59,6 +70,7 @@ public class Proyecto_Mascota {
         do {
             menuPrincipal();
             System.out.print(Estilos.PREGUNTA + " Opcion: ");
+            System.out.flush();
             opc = leerEntero(1, 3);
             switch (opc) {
                 case 1: mascotita(usu); break;
@@ -97,6 +109,7 @@ public class Proyecto_Mascota {
         System.out.println(Estilos.CIAN   + "  2." + Estilos.RESET + "  Consultar mis mascotas");
         System.out.println(Estilos.ROJO_B + "  3." + Estilos.RESET + "  Salir");
         System.out.println(Estilos.LINEA_SIMPLE);
+        System.out.flush();
     }
  
     private static void mascotita(List<Usuario> usu) {
@@ -114,6 +127,7 @@ public class Proyecto_Mascota {
             System.out.println(Estilos.CIAN      + "  6." + Estilos.RESET + "  Volver al menu principal");
             System.out.println(Estilos.LINEA_SIMPLE);
             System.out.print(Estilos.PREGUNTA + " Opcion: ");
+            System.out.flush();
             op = leerEntero(1, 6);
             switch (op) {
                 case 1: if (armadillito(usu) == 0) return; break;
@@ -139,7 +153,7 @@ public class Proyecto_Mascota {
             if (!u.getMascotas().isEmpty()) {
                 System.out.println(Estilos.AMARILLO_B + "  Mascotas adoptadas:" + Estilos.RESET);
                 for (Mascota m : u.getMascotas()) {
-                    System.out.println(Estilos.VERDE_B + "    ▸ " + Estilos.RESET + m.getEspecie()
+                    System.out.println(Estilos.VERDE_B + "    \u25b8 " + Estilos.RESET + m.getEspecie()
                         + Estilos.TENUE + " (" + m.getNombre() + ")" + Estilos.RESET);
                 }
             } else {
@@ -147,6 +161,12 @@ public class Proyecto_Mascota {
             }
         }
         System.out.println();
+        System.out.println(Estilos.LINEA_SIMPLE);
+        // Pausa: espera que el usuario presione Enter antes de volver al menu
+        System.out.print(Estilos.PREGUNTA + " Presiona Enter para volver al menu...");
+        System.out.flush();
+        limpiarBuffer();
+        sc.nextLine();
     }
  
     // ─── Helper: ficha de mascota ──────────────────────────────────
@@ -163,6 +183,7 @@ public class Proyecto_Mascota {
         System.out.println(Estilos.AZUL_B   + "  Anos de vida    " + Estilos.RESET + ":  " + m.getAniosVida());
         System.out.println(Estilos.MAGENTA_B + "  Habilidad       " + Estilos.RESET + ":  " + m.getHabilidad());
         System.out.println(Estilos.LINEA_SIMPLE);
+        System.out.flush();
     }
  
     // ─── Helper: menu de acciones ─────────────────────────────────
@@ -179,6 +200,7 @@ public class Proyecto_Mascota {
         System.out.println(Estilos.ROJO_B   + (tieneBanio ? "  5." : "  4.") + Estilos.RESET + "  Volver");
         System.out.println(Estilos.LINEA_PUNTEADA);
         System.out.print(Estilos.PREGUNTA + " Opcion: ");
+        System.out.flush();
     }
  
     // ─── Mascotas ─────────────────────────────────────────────────
@@ -187,6 +209,7 @@ public class Proyecto_Mascota {
         Armadillo arma = new Armadillo(null, "Armadillo", 45, "Insectos", 15, "Coraza de metal");
         System.out.println(Estilos.OK + Estilos.VERDE_B + " Has adoptado un Armadillo!" + Estilos.RESET);
         System.out.print(Estilos.PREGUNTA + " Que nombre le pondras? ");
+        System.out.flush();
         arma.setNombre(sc.nextLine().trim());
         usu.get(0).agregarMascota(arma);
         mostrarFicha(arma);
@@ -216,6 +239,7 @@ public class Proyecto_Mascota {
         Delfin del = new Delfin(null, "Delfin", 20, "Sardinas", 30, "Lanza chorro de agua");
         System.out.println(Estilos.OK + Estilos.VERDE_B + " Has adoptado un tierno Delfin!" + Estilos.RESET);
         System.out.print(Estilos.PREGUNTA + " Que nombre le pondras? ");
+        System.out.flush();
         del.setNombre(sc.nextLine().trim());
         usu.get(0).agregarMascota(del);
         mostrarFicha(del);
@@ -242,6 +266,7 @@ public class Proyecto_Mascota {
         Oso osito = new Oso(null, "Oso", 65, "Carne, pescado y fruta", 30, "Lanzar rafagas de hielo");
         System.out.println(Estilos.OK + Estilos.VERDE_B + " Has adoptado un feroz Oso!" + Estilos.RESET);
         System.out.print(Estilos.PREGUNTA + " Que nombre le pondras? ");
+        System.out.flush();
         osito.setNombre(sc.nextLine().trim());
         usu.get(0).agregarMascota(osito);
         mostrarFicha(osito);
@@ -271,6 +296,7 @@ public class Proyecto_Mascota {
         Pajaro pajarito = new Pajaro(null, "Pajaro", 10, "Semillas de girasol", 20, "Prender en llamas");
         System.out.println(Estilos.OK + Estilos.VERDE_B + " Has adoptado un lindo Pajarito!" + Estilos.RESET);
         System.out.print(Estilos.PREGUNTA + " Que nombre le pondras? ");
+        System.out.flush();
         pajarito.setNombre(sc.nextLine().trim());
         usu.get(0).agregarMascota(pajarito);
         mostrarFicha(pajarito);
@@ -297,6 +323,7 @@ public class Proyecto_Mascota {
         Perro perrito = new Perro(null, "Perro", 5, "Croquetas", 18, "Crecer 5 metros");
         System.out.println(Estilos.OK + Estilos.VERDE_B + " Has adoptado un tierno Perro!" + Estilos.RESET);
         System.out.print(Estilos.PREGUNTA + " Que nombre le pondras? ");
+        System.out.flush();
         perrito.setNombre(sc.nextLine().trim());
         usu.get(0).agregarMascota(perrito);
         mostrarFicha(perrito);
@@ -322,4 +349,3 @@ public class Proyecto_Mascota {
         } while (true);
     }
 }
- 
