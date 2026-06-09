@@ -21,7 +21,7 @@ public class Proyecto_Mascota {
         while (true) {
             try {
                 String linea = sc.nextLine().trim();
-                if (linea.isEmpty()) continue;          // ignorar Enters vacios
+                if (linea.isEmpty()) continue;
                 return Integer.parseInt(linea);
             } catch (NumberFormatException e) {
                 System.out.println(Estilos.ERROR + Estilos.ROJO_B + " Ingresa solo un numero entero." + Estilos.RESET);
@@ -40,10 +40,21 @@ public class Proyecto_Mascota {
         }
     }
  
+    // Pausa generica antes de cambiar de vista
+    private static void pausar() {
+        System.out.println();
+        System.out.print(Estilos.PREGUNTA + " Presiona Enter para continuar...");
+        System.out.flush();
+        limpiarBuffer();
+        sc.nextLine();
+        Estilos.limpiar();
+    }
+ 
     public static void main(String[] args) {
  
         List<Usuario> usu = new ArrayList<>();
  
+        Estilos.limpiar();
         pantallaInicio();
  
         System.out.print(Estilos.INFO + Estilos.CIAN_B + " Introduce tu nombre: " + Estilos.RESET);
@@ -66,12 +77,16 @@ public class Proyecto_Mascota {
         System.out.println();
         System.out.println(Estilos.OK + Estilos.VERDE_B + " Bienvenido/a, " + Estilos.NEGRITA + nom + Estilos.RESET + Estilos.VERDE_B + "!" + Estilos.RESET);
  
+        // Pausa antes de entrar al menu principal
+        pausar();
+ 
         int opc;
         do {
             menuPrincipal();
             System.out.print(Estilos.PREGUNTA + " Opcion: ");
             System.out.flush();
             opc = leerEntero(1, 3);
+            Estilos.limpiar();
             switch (opc) {
                 case 1: mascotita(usu); break;
                 case 2: consultita(usu); break;
@@ -129,6 +144,7 @@ public class Proyecto_Mascota {
             System.out.print(Estilos.PREGUNTA + " Opcion: ");
             System.out.flush();
             op = leerEntero(1, 6);
+            Estilos.limpiar();
             switch (op) {
                 case 1: if (armadillito(usu) == 0) return; break;
                 case 2: if (delfincito(usu)  == 0) return; break;
@@ -162,11 +178,11 @@ public class Proyecto_Mascota {
         }
         System.out.println();
         System.out.println(Estilos.LINEA_SIMPLE);
-        // Pausa: espera que el usuario presione Enter antes de volver al menu
         System.out.print(Estilos.PREGUNTA + " Presiona Enter para volver al menu...");
         System.out.flush();
         limpiarBuffer();
         sc.nextLine();
+        Estilos.limpiar();
     }
  
     // ─── Helper: ficha de mascota ──────────────────────────────────
@@ -184,6 +200,8 @@ public class Proyecto_Mascota {
         System.out.println(Estilos.MAGENTA_B + "  Habilidad       " + Estilos.RESET + ":  " + m.getHabilidad());
         System.out.println(Estilos.LINEA_SIMPLE);
         System.out.flush();
+        // Pausa para que el usuario lea la ficha antes de ver el menu de acciones
+        pausar();
     }
  
     // ─── Helper: menu de acciones ─────────────────────────────────
@@ -195,12 +213,18 @@ public class Proyecto_Mascota {
         System.out.println(Estilos.VERDE_B  + "  1." + Estilos.RESET + "  Alimentar");
         System.out.println(Estilos.AZUL_B   + "  2." + Estilos.RESET + "  Jugar");
         if (tieneBanio)
-            System.out.println(Estilos.CIAN + "  3." + Estilos.RESET + "  Bañar");
+            System.out.println(Estilos.CIAN + "  3." + Estilos.RESET + "  Ba\u00f1ar");
         System.out.println(Estilos.MAGENTA_B + (tieneBanio ? "  4." : "  3.") + Estilos.RESET + "  Mostrar habilidad");
         System.out.println(Estilos.ROJO_B   + (tieneBanio ? "  5." : "  4.") + Estilos.RESET + "  Volver");
         System.out.println(Estilos.LINEA_PUNTEADA);
         System.out.print(Estilos.PREGUNTA + " Opcion: ");
         System.out.flush();
+    }
+ 
+    // Ejecuta una accion y pausa antes de volver al menu de acciones
+    private static void ejecutarAccion(Runnable accion) {
+        accion.run();
+        pausar();
     }
  
     // ─── Mascotas ─────────────────────────────────────────────────
@@ -212,24 +236,18 @@ public class Proyecto_Mascota {
         System.out.flush();
         arma.setNombre(sc.nextLine().trim());
         usu.get(0).agregarMascota(arma);
+        Estilos.limpiar();
         mostrarFicha(arma);
         int accion;
         do {
             menuAcciones(true);
             accion = leerEntero(1, 5);
+            Estilos.limpiar();
             switch (accion) {
-                case 1:
-                    System.out.println(Estilos.INFO + " Los armadillos comen insectos.");
-                    arma.Alimentar(); break;
-                case 2:
-                    System.out.println(Estilos.INFO + " Corre! Tu armadillo rodara por el suelo.");
-                    arma.Jugar(); break;
-                case 3:
-                    System.out.println(Estilos.INFO + " Hora del bano, prepara el balde.");
-                    arma.Bañar(); break;
-                case 4:
-                    System.out.println(Estilos.INFO + " Retrocede... aqui viene la demostracion!");
-                    arma.activarHabilidad(); break;
+                case 1: ejecutarAccion(() -> { System.out.println(Estilos.INFO + " Los armadillos comen insectos."); arma.Alimentar(); }); break;
+                case 2: ejecutarAccion(() -> { System.out.println(Estilos.INFO + " Corre! Tu armadillo rodara por el suelo."); arma.Jugar(); }); break;
+                case 3: ejecutarAccion(() -> { System.out.println(Estilos.INFO + " Hora del bano, prepara el balde."); arma.Bañar(); }); break;
+                case 4: ejecutarAccion(() -> { System.out.println(Estilos.INFO + " Retrocede... aqui viene la demostracion!"); arma.activarHabilidad(); }); break;
                 case 5: return 0;
             }
         } while (true);
@@ -242,21 +260,17 @@ public class Proyecto_Mascota {
         System.out.flush();
         del.setNombre(sc.nextLine().trim());
         usu.get(0).agregarMascota(del);
+        Estilos.limpiar();
         mostrarFicha(del);
         int accion;
         do {
             menuAcciones(false);
             accion = leerEntero(1, 4);
+            Estilos.limpiar();
             switch (accion) {
-                case 1:
-                    System.out.println(Estilos.INFO + " Los delfines comen sardinas.");
-                    del.Alimentar(); break;
-                case 2:
-                    System.out.println(Estilos.INFO + " A los delfines les encanta jugar con pelotas!");
-                    del.Jugar(); break;
-                case 3:
-                    System.out.println(Estilos.INFO + " Retrocede... aqui viene la demostracion!");
-                    del.activarHabilidad(); break;
+                case 1: ejecutarAccion(() -> { System.out.println(Estilos.INFO + " Los delfines comen sardinas."); del.Alimentar(); }); break;
+                case 2: ejecutarAccion(() -> { System.out.println(Estilos.INFO + " A los delfines les encanta jugar con pelotas!"); del.Jugar(); }); break;
+                case 3: ejecutarAccion(() -> { System.out.println(Estilos.INFO + " Retrocede... aqui viene la demostracion!"); del.activarHabilidad(); }); break;
                 case 4: return 0;
             }
         } while (true);
@@ -269,24 +283,18 @@ public class Proyecto_Mascota {
         System.out.flush();
         osito.setNombre(sc.nextLine().trim());
         usu.get(0).agregarMascota(osito);
+        Estilos.limpiar();
         mostrarFicha(osito);
         int accion;
         do {
             menuAcciones(true);
             accion = leerEntero(1, 5);
+            Estilos.limpiar();
             switch (accion) {
-                case 1:
-                    System.out.println(Estilos.INFO + " Los osos comen carne, pescado y fruta.");
-                    osito.Alimentar(); break;
-                case 2:
-                    System.out.println(Estilos.INFO + " Sube en su lomo y den un paseo por el bosque!");
-                    osito.Jugar(); break;
-                case 3:
-                    System.out.println(Estilos.INFO + " Hora del bano, llevalo al rio.");
-                    osito.Bañar(); break;
-                case 4:
-                    System.out.println(Estilos.INFO + " Retrocede... aqui viene la demostracion!");
-                    osito.activarHabilidad(); break;
+                case 1: ejecutarAccion(() -> { System.out.println(Estilos.INFO + " Los osos comen carne, pescado y fruta."); osito.Alimentar(); }); break;
+                case 2: ejecutarAccion(() -> { System.out.println(Estilos.INFO + " Sube en su lomo y den un paseo por el bosque!"); osito.Jugar(); }); break;
+                case 3: ejecutarAccion(() -> { System.out.println(Estilos.INFO + " Hora del bano, llevalo al rio."); osito.Bañar(); }); break;
+                case 4: ejecutarAccion(() -> { System.out.println(Estilos.INFO + " Retrocede... aqui viene la demostracion!"); osito.activarHabilidad(); }); break;
                 case 5: return 0;
             }
         } while (true);
@@ -299,21 +307,17 @@ public class Proyecto_Mascota {
         System.out.flush();
         pajarito.setNombre(sc.nextLine().trim());
         usu.get(0).agregarMascota(pajarito);
+        Estilos.limpiar();
         mostrarFicha(pajarito);
         int accion;
         do {
             menuAcciones(false);
             accion = leerEntero(1, 4);
+            Estilos.limpiar();
             switch (accion) {
-                case 1:
-                    System.out.println(Estilos.INFO + " Los pajaros comen semillas de girasol.");
-                    pajarito.Alimentar(); break;
-                case 2:
-                    System.out.println(Estilos.INFO + " Corre! Tu pajaro emprendera el vuelo!");
-                    pajarito.Jugar(); break;
-                case 3:
-                    System.out.println(Estilos.INFO + " Retrocede... aqui viene la demostracion!");
-                    pajarito.activarHabilidad(); break;
+                case 1: ejecutarAccion(() -> { System.out.println(Estilos.INFO + " Los pajaros comen semillas de girasol."); pajarito.Alimentar(); }); break;
+                case 2: ejecutarAccion(() -> { System.out.println(Estilos.INFO + " Corre! Tu pajaro emprendera el vuelo!"); pajarito.Jugar(); }); break;
+                case 3: ejecutarAccion(() -> { System.out.println(Estilos.INFO + " Retrocede... aqui viene la demostracion!"); pajarito.activarHabilidad(); }); break;
                 case 4: return 0;
             }
         } while (true);
@@ -326,24 +330,18 @@ public class Proyecto_Mascota {
         System.out.flush();
         perrito.setNombre(sc.nextLine().trim());
         usu.get(0).agregarMascota(perrito);
+        Estilos.limpiar();
         mostrarFicha(perrito);
         int accion;
         do {
             menuAcciones(true);
             accion = leerEntero(1, 5);
+            Estilos.limpiar();
             switch (accion) {
-                case 1:
-                    System.out.println(Estilos.INFO + " Los perros comen croquetas.");
-                    perrito.Alimentar(); break;
-                case 2:
-                    System.out.println(Estilos.INFO + " Agarra una pelota y lanzala!");
-                    perrito.Jugar(); break;
-                case 3:
-                    System.out.println(Estilos.INFO + " Prepara la manguera y el jabon!");
-                    perrito.Bañar(); break;
-                case 4:
-                    System.out.println(Estilos.INFO + " Retrocede... aqui viene la demostracion!");
-                    perrito.activarHabilidad(); break;
+                case 1: ejecutarAccion(() -> { System.out.println(Estilos.INFO + " Los perros comen croquetas."); perrito.Alimentar(); }); break;
+                case 2: ejecutarAccion(() -> { System.out.println(Estilos.INFO + " Agarra una pelota y lanzala!"); perrito.Jugar(); }); break;
+                case 3: ejecutarAccion(() -> { System.out.println(Estilos.INFO + " Prepara la manguera y el jabon!"); perrito.Bañar(); }); break;
+                case 4: ejecutarAccion(() -> { System.out.println(Estilos.INFO + " Retrocede... aqui viene la demostracion!"); perrito.activarHabilidad(); }); break;
                 case 5: return 0;
             }
         } while (true);
