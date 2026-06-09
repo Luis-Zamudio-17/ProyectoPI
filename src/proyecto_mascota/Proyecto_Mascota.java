@@ -2,444 +2,324 @@ package proyecto_mascota;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+ 
 public class Proyecto_Mascota {
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_PINK = "\u001B[35m";
-    
-    
+ 
+    static final Scanner sc = new Scanner(System.in);
+ 
+    // Lee un entero con try-catch, repite si la entrada no es valida
+    private static int leerEntero() {
+        while (true) {
+            try {
+                String linea = sc.nextLine().trim();
+                return Integer.parseInt(linea);
+            } catch (NumberFormatException e) {
+                System.out.println(Estilos.ERROR + Estilos.ROJO_B + " Ingresa solo un numero entero." + Estilos.RESET);
+                System.out.print(Estilos.PREGUNTA + " Opcion: ");
+            }
+        }
+    }
+ 
+    // Lee un entero dentro de un rango valido
+    private static int leerEntero(int min, int max) {
+        while (true) {
+            int n = leerEntero();
+            if (n >= min && n <= max) return n;
+            System.out.println(Estilos.ERROR + Estilos.ROJO_B + " Opcion invalida. Elige entre " + min + " y " + max + "." + Estilos.RESET);
+            System.out.print(Estilos.PREGUNTA + " Opcion: ");
+        }
+    }
+ 
     public static void main(String[] args) {
-        
+ 
         List<Usuario> usu = new ArrayList<>();
-        
-        Scanner sc=new Scanner(System.in);
-        Scanner sc2=new Scanner(System.in);
-          
-        System.out.println("Introduce tu nombre");
-        String nom=sc.nextLine();
-        System.out.println("Introduce tu edad");
-        int ed=sc2.nextInt();
-        
-        usu.add(new Usuario(nom,ed));
-        
-        int opc=0;
-        Scanner sca = new Scanner(System.in);
-        
-        do{
-        
-            System.out.println("                 Bienvenido a..." +"\n"+ANSI_PINK
-                    +"-------------LAS MASCOTAS MARAVILLA--------------"+ANSI_RESET);
-            System.out.println("");
-            System.out.println("Que te gustaria hacer");
-            System.out.println("1. Adoptar una mascota");
-            System.out.println("2. Consultar mis mascotas");
-            System.out.println("3. Salir");
-
-            if(sca.hasNextInt()){
-                opc=sca.nextInt();
-                switch(opc){
-                    case 1:
-                        mascotita(usu);
-                        break;
-                    case 2:
-                        consultita(usu);
-                        break;
-                }
+ 
+        pantallaInicio();
+ 
+        System.out.print(Estilos.INFO + Estilos.CIAN_B + " Introduce tu nombre: " + Estilos.RESET);
+        String nom = sc.nextLine().trim();
+ 
+        int ed = 0;
+        while (true) {
+            try {
+                System.out.print(Estilos.INFO + Estilos.CIAN_B + " Introduce tu edad:  " + Estilos.RESET);
+                ed = Integer.parseInt(sc.nextLine().trim());
+                if (ed <= 0) throw new NumberFormatException();
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println(Estilos.ERROR + Estilos.ROJO_B + " Ingresa una edad valida." + Estilos.RESET);
             }
-        }while(opc !=3);
-    }    
-
+        }
+ 
+        usu.add(new Usuario(nom, ed));
+        System.out.println();
+        System.out.println(Estilos.OK + Estilos.VERDE_B + " Bienvenido/a, " + Estilos.NEGRITA + nom + Estilos.RESET + Estilos.VERDE_B + "!" + Estilos.RESET);
+ 
+        int opc;
+        do {
+            menuPrincipal();
+            System.out.print(Estilos.PREGUNTA + " Opcion: ");
+            opc = leerEntero(1, 3);
+            switch (opc) {
+                case 1: mascotita(usu); break;
+                case 2: consultita(usu); break;
+                case 3:
+                    System.out.println();
+                    System.out.println(Estilos.LINEA_SIMPLE);
+                    System.out.println(Estilos.MAGENTA_B + Estilos.NEGRITA
+                        + "  Hasta pronto, " + nom + "! Cuida bien a tus mascotas  " + Estilos.RESET);
+                    System.out.println(Estilos.LINEA_SIMPLE);
+                    break;
+            }
+        } while (opc != 3);
+    }
+ 
+    // ─── Pantallas ────────────────────────────────────────────────
+ 
+    private static void pantallaInicio() {
+        System.out.println();
+        System.out.println(Estilos.LINEA_DOBLE);
+        System.out.println(Estilos.centrar(""));
+        System.out.println(Estilos.centrar(Estilos.NEGRITA + Estilos.AMARILLO_B + "~ LAS MASCOTAS MARAVILLA ~" + Estilos.RESET));
+        System.out.println(Estilos.centrar(""));
+        System.out.println(Estilos.centrar(Estilos.TENUE + "Tu refugio de criaturas extraordinarias" + Estilos.RESET));
+        System.out.println(Estilos.centrar(""));
+        System.out.println(Estilos.LINEA_DOBLE_FIN);
+        System.out.println();
+    }
+ 
+    private static void menuPrincipal() {
+        System.out.println();
+        System.out.println(Estilos.LINEA_SIMPLE);
+        System.out.println(Estilos.AMARILLO_B + Estilos.NEGRITA + "  MENU PRINCIPAL" + Estilos.RESET);
+        System.out.println(Estilos.LINEA_SIMPLE);
+        System.out.println(Estilos.CIAN   + "  1." + Estilos.RESET + "  Adoptar una mascota");
+        System.out.println(Estilos.CIAN   + "  2." + Estilos.RESET + "  Consultar mis mascotas");
+        System.out.println(Estilos.ROJO_B + "  3." + Estilos.RESET + "  Salir");
+        System.out.println(Estilos.LINEA_SIMPLE);
+    }
+ 
     private static void mascotita(List<Usuario> usu) {
-                int op;
-                Scanner scan= new Scanner(System.in);
-                do{
-                    System.out.println("");
-                    System.out.println(ANSI_YELLOW +"Que mascota te gustaria adoptar"+ANSI_RESET);
-                    System.out.println("1. Armadillo");
-                    System.out.println("2. Delfin");
-                    System.out.println("3. Oso");
-                    System.out.println("4. Pajaro");
-                    System.out.println("5. Perro");
-                    System.out.println("6. Volver a menu principal");
-
-                    if(scan.hasNextInt()){
-                        op=scan.nextInt();
-                        switch(op){
-                            case 1:
-                                int resultado= armadillito(usu);
-                                if (resultado == 0) return;
-                                break;
-                            case 2:
-                                int resultadito = delfincito(usu);
-                                if (resultadito == 0) return;
-                                break;
-                            case 3:
-                                int result = osito(usu);
-                                if (result == 0) return;
-                                break;
-                            case 4:
-                                int regresar = pajaritito(usu);
-                                if (regresar == 0) return;
-                                break;
-                            case 5:
-                                int regre = perritito(usu);
-                                if (regre == 0) return;
-                                break;
-                            case 6:
-                                return;
-                            default:
-                                System.out.println("Selecciona una opcion valida");
-                        }
-                    }else{
-                        System.out.println("Selecciona una opcion valida");
-                        scan.nextLine();
-                    }
-                }while(true);
+        int op;
+        do {
+            System.out.println();
+            System.out.println(Estilos.LINEA_SIMPLE);
+            System.out.println(Estilos.AMARILLO_B + Estilos.NEGRITA + "  ADOPTAR UNA MASCOTA" + Estilos.RESET);
+            System.out.println(Estilos.LINEA_SIMPLE);
+            System.out.println(Estilos.VERDE_B  + "  1." + Estilos.RESET + "  \uD83D\uDEE1 Armadillo  " + Estilos.TENUE + "(agresividad: 45)" + Estilos.RESET);
+            System.out.println(Estilos.AZUL_B   + "  2." + Estilos.RESET + "  \uD83D\uDC2C Delfin     " + Estilos.TENUE + "(agresividad: 20)" + Estilos.RESET);
+            System.out.println(Estilos.ROJO_B   + "  3." + Estilos.RESET + "  \uD83D\uDC3B Oso        " + Estilos.TENUE + "(agresividad: 65)" + Estilos.RESET);
+            System.out.println(Estilos.AMARILLO_B+ "  4." + Estilos.RESET + "  \uD83D\uDC26 Pajaro     " + Estilos.TENUE + "(agresividad: 10)" + Estilos.RESET);
+            System.out.println(Estilos.MAGENTA_B + "  5." + Estilos.RESET + "  \uD83D\uDC36 Perro      " + Estilos.TENUE + "(agresividad:  5)" + Estilos.RESET);
+            System.out.println(Estilos.CIAN      + "  6." + Estilos.RESET + "  Volver al menu principal");
+            System.out.println(Estilos.LINEA_SIMPLE);
+            System.out.print(Estilos.PREGUNTA + " Opcion: ");
+            op = leerEntero(1, 6);
+            switch (op) {
+                case 1: if (armadillito(usu) == 0) return; break;
+                case 2: if (delfincito(usu)  == 0) return; break;
+                case 3: if (osito(usu)       == 0) return; break;
+                case 4: if (pajaritito(usu)  == 0) return; break;
+                case 5: if (perritito(usu)   == 0) return; break;
+                case 6: return;
+            }
+        } while (true);
     }
-
+ 
     private static void consultita(List<Usuario> usu) {
-        System.out.println(ANSI_YELLOW +"<------------------Mis Mascotas------------->"+ANSI_RESET);
-                    for (int i = 0; i < usu.size(); i++) {
-                        System.out.println("Nombre: "+usu.get(i).getName()+"\n"+"Edad: "+usu.get(i).getEdad());
-                        if (!usu.get(i).getMascotas().isEmpty()) {
-                            System.out.println("Mascotas:");
-                            for (Mascota m : usu.get(i).getMascotas()) {
-                                System.out.println("- " + m.getEspecie());
-                            }
-                        } else {
-                            System.out.println("No tienes mascotas adoptadas aún.");
-                        }
-                        System.out.println("");
-                    }
+        System.out.println();
+        System.out.println(Estilos.LINEA_DOBLE);
+        System.out.println(Estilos.centrar(Estilos.NEGRITA + Estilos.CIAN_B + "MIS MASCOTAS" + Estilos.RESET));
+        System.out.println(Estilos.LINEA_DOBLE_FIN);
+        for (Usuario u : usu) {
+            System.out.println();
+            System.out.println(Estilos.INFO + Estilos.NEGRITA + " Nombre: " + Estilos.RESET + u.getName()
+                + Estilos.TENUE + "   |   Edad: " + u.getEdad() + Estilos.RESET);
+            System.out.println(Estilos.LINEA_PUNTEADA);
+            if (!u.getMascotas().isEmpty()) {
+                System.out.println(Estilos.AMARILLO_B + "  Mascotas adoptadas:" + Estilos.RESET);
+                for (Mascota m : u.getMascotas()) {
+                    System.out.println(Estilos.VERDE_B + "    ▸ " + Estilos.RESET + m.getEspecie()
+                        + Estilos.TENUE + " (" + m.getNombre() + ")" + Estilos.RESET);
+                }
+            } else {
+                System.out.println(Estilos.TENUE + "  Aun no tienes mascotas adoptadas." + Estilos.RESET);
+            }
+        }
+        System.out.println();
     }
-    
+ 
+    // ─── Helper: ficha de mascota ──────────────────────────────────
+ 
+    private static void mostrarFicha(Mascota m) {
+        System.out.println();
+        System.out.println(Estilos.LINEA_DOBLE);
+        System.out.println(Estilos.centrar(Estilos.NEGRITA + Estilos.AMARILLO_B + "FICHA DE MASCOTA" + Estilos.RESET));
+        System.out.println(Estilos.LINEA_DOBLE_FIN);
+        System.out.println(Estilos.CIAN_B   + "  Nombre          " + Estilos.RESET + ":  " + Estilos.NEGRITA + m.getNombre() + Estilos.RESET);
+        System.out.println(Estilos.CIAN_B   + "  Especie         " + Estilos.RESET + ":  " + m.getEspecie());
+        System.out.println(Estilos.AMARILLO_B+ "  Agresividad     " + Estilos.RESET + ":  " + m.getAgresividad() + " / 100");
+        System.out.println(Estilos.VERDE_B  + "  Dieta           " + Estilos.RESET + ":  " + m.getDieta());
+        System.out.println(Estilos.AZUL_B   + "  Anos de vida    " + Estilos.RESET + ":  " + m.getAniosVida());
+        System.out.println(Estilos.MAGENTA_B + "  Habilidad       " + Estilos.RESET + ":  " + m.getHabilidad());
+        System.out.println(Estilos.LINEA_SIMPLE);
+    }
+ 
+    // ─── Helper: menu de acciones ─────────────────────────────────
+ 
+    private static void menuAcciones(boolean tieneBanio) {
+        System.out.println();
+        System.out.println(Estilos.AMARILLO_B + Estilos.NEGRITA + "  QUE DESEAS HACER?" + Estilos.RESET);
+        System.out.println(Estilos.LINEA_PUNTEADA);
+        System.out.println(Estilos.VERDE_B  + "  1." + Estilos.RESET + "  Alimentar");
+        System.out.println(Estilos.AZUL_B   + "  2." + Estilos.RESET + "  Jugar");
+        if (tieneBanio)
+            System.out.println(Estilos.CIAN + "  3." + Estilos.RESET + "  Bañar");
+        System.out.println(Estilos.MAGENTA_B + (tieneBanio ? "  4." : "  3.") + Estilos.RESET + "  Mostrar habilidad");
+        System.out.println(Estilos.ROJO_B   + (tieneBanio ? "  5." : "  4.") + Estilos.RESET + "  Volver");
+        System.out.println(Estilos.LINEA_PUNTEADA);
+        System.out.print(Estilos.PREGUNTA + " Opcion: ");
+    }
+ 
+    // ─── Mascotas ─────────────────────────────────────────────────
+ 
     private static int armadillito(List<Usuario> usu) {
-        
-        Scanner ar = new Scanner(System.in);
-        Armadillo arma= new Armadillo(null,"Armadillo",45,"Insectos",15,"Coraza de metal");
-                
-        System.out.println("Genial!!, has adoptado un Armadillo");
-        System.out.println("Que nombre te gustaria darle?");
-        String nombree = ar.nextLine();
-        arma.setNombre(nombree);
+        Armadillo arma = new Armadillo(null, "Armadillo", 45, "Insectos", 15, "Coraza de metal");
+        System.out.println(Estilos.OK + Estilos.VERDE_B + " Has adoptado un Armadillo!" + Estilos.RESET);
+        System.out.print(Estilos.PREGUNTA + " Que nombre le pondras? ");
+        arma.setNombre(sc.nextLine().trim());
         usu.get(0).agregarMascota(arma);
-                
-                
-        System.out.println("Excelente, aqui estan los datos de tu nuevo amigo:");
-        System.out.println(ANSI_CYAN+"-----------------------------------------"+ANSI_RESET);
-        System.out.println("");
-        System.out.println("Nombre: "+arma.getNombre()+"\n"+"Especie: "+ arma.getEspecie() + "\n"
-                        +"Nivel de agresividad: "+ arma.getAgresividad()+ "\n"+ "Especificaciones de su dieta: " + arma.getDieta()+"\n"
-                        +"Años de vida: "+arma.getAniosVida()+"\n"+"Habilidad especial: "+arma.getHabilidad());
-        System.out.println("");
-        System.out.println(ANSI_CYAN+"-----------------------------------------"+ANSI_RESET);
-        
-        int accion=0;
-        Scanner acc = new Scanner(System.in);
-        do{
-            System.out.println(ANSI_YELLOW+"¿Que te gustaria hacer con tu nueva mascota?"+ANSI_RESET);
-            System.out.println("1. Alimentar");
-            System.out.println("2. Jugar");
-            System.out.println("3. Bañar");
-            System.out.println("4. Mostrar habilidad");
-            System.out.println("5. Salir");
-            System.out.println("");
-            
-            if (acc.hasNextInt()) {
-            accion=acc.nextInt();
+        mostrarFicha(arma);
+        int accion;
+        do {
+            menuAcciones(true);
+            accion = leerEntero(1, 5);
+            switch (accion) {
+                case 1:
+                    System.out.println(Estilos.INFO + " Los armadillos comen insectos.");
+                    arma.Alimentar(); break;
+                case 2:
+                    System.out.println(Estilos.INFO + " Corre! Tu armadillo rodara por el suelo.");
+                    arma.Jugar(); break;
+                case 3:
+                    System.out.println(Estilos.INFO + " Hora del bano, prepara el balde.");
+                    arma.Bañar(); break;
+                case 4:
+                    System.out.println(Estilos.INFO + " Retrocede... aqui viene la demostracion!");
+                    arma.activarHabilidad(); break;
+                case 5: return 0;
             }
-            else{
-                System.out.println("No es un número entero");
-                acc.next();
-            }
-            if (accion == 1) {
-                System.out.println("Muy bien!");
-                System.out.println("Has elegido alimentar a tu mascota"+"\n"
-                        +"Recuerda que los armadillo comen insectos");
-                arma.Alimentar();
-                
-            }
-            if (accion == 2) {
-                System.out.println("Excelente");
-                System.out.println("Corre y tu mascota rodara por el suelo");
-                arma.Jugar();
-            }
-            if (accion ==3) {
-                System.out.println("Por lo visto tu mascota esta bastante sucia, es hora del baño");
-                arma.Bañar();
-            }
-            if (accion == 4) {
-                System.out.println("Valla, asi que quieres que tu mascota muestre su habilidad...");
-                System.out.println("Esta bien, retrocede un poco, mientras tu mascota hace una demostración");
-                arma.activarHabilidad();
-            }
-            switch(accion){
-                case 5:
-                    return 0;
-            }
-            
-        }while(true);
+        } while (true);
     }
-
+ 
     private static int delfincito(List<Usuario> usu) {
-        Scanner de = new Scanner(System.in);
-        Delfin del = new Delfin(null,"Delfin",20,"Sardinas",30,"Lanza chorro de agua");
-                
-        System.out.println("Genial!!, has adoptado un tierno Delfin");
-        System.out.println("Que nombre te gustaria darle?");
-        String nombree = de.nextLine();
-        del.setNombre(nombree);
+        Delfin del = new Delfin(null, "Delfin", 20, "Sardinas", 30, "Lanza chorro de agua");
+        System.out.println(Estilos.OK + Estilos.VERDE_B + " Has adoptado un tierno Delfin!" + Estilos.RESET);
+        System.out.print(Estilos.PREGUNTA + " Que nombre le pondras? ");
+        del.setNombre(sc.nextLine().trim());
         usu.get(0).agregarMascota(del);
-                
-        System.out.println("Excelente, aqui estan los datos de tu nuevo amigo:");
-        System.out.println(ANSI_CYAN+"-----------------------------------------"+ANSI_RESET);
-        System.out.println("");
-        System.out.println("Nombre: "+del.getNombre()+"\n"+"Especie: "+ del.getEspecie() + "\n"
-                        +"Nivel de agresividad: "+ del.getAgresividad()+ "\n"+ "Especificaciones de su dieta: " + del.getDieta()+"\n"
-                        +"Años de vida: "+del.getAniosVida()+"\n"+"Habilidad especial: "+del.getHabilidad());
-        System.out.println("");
-        
-        System.out.println(ANSI_CYAN+"-----------------------------------------"+ANSI_RESET);
-        
-        int accion=0;
-        Scanner acc = new Scanner(System.in);
-        do{
-            System.out.println(ANSI_YELLOW+"¿Que te gustaria hacer con tu nueva mascota?"+ANSI_RESET);
-            System.out.println("1. Alimentar");
-            System.out.println("2. Jugar");
-            System.out.println("3. Mostrar habilidad");
-            System.out.println("4. Salir");
-            System.out.println("");
-            
-            if (acc.hasNextInt()) {
-            accion=acc.nextInt();
+        mostrarFicha(del);
+        int accion;
+        do {
+            menuAcciones(false);
+            accion = leerEntero(1, 4);
+            switch (accion) {
+                case 1:
+                    System.out.println(Estilos.INFO + " Los delfines comen sardinas.");
+                    del.Alimentar(); break;
+                case 2:
+                    System.out.println(Estilos.INFO + " A los delfines les encanta jugar con pelotas!");
+                    del.Jugar(); break;
+                case 3:
+                    System.out.println(Estilos.INFO + " Retrocede... aqui viene la demostracion!");
+                    del.activarHabilidad(); break;
+                case 4: return 0;
             }
-            else{
-                System.out.println("No es un número entero");
-                acc.next();
-            }
-            if (accion == 1) {
-                System.out.println("Muy bien!");
-                System.out.println("Has elegido alimentar a tu mascota"+"\n"
-                        +"Recuerda que los delfines comen sardinas");
-                del.Alimentar();
-                
-            }
-            if (accion == 2) {
-                System.out.println("Excelente");
-                System.out.println("A los delfines les gusta jugar con pelotas");
-                del.Jugar();
-            }
-            
-            if (accion == 3) {
-                System.out.println("Valla, asi que quieres que tu mascota muestre su habilidad...");
-                System.out.println("Esta bien, retrocede un poco, mientras tu mascota hace una demostración");
-                del.activarHabilidad();
-            }
-            switch(accion){
-                case 4:
-                    return 0;
-            }
-            
-        }while(true);
-                 
+        } while (true);
     }
-
+ 
     private static int osito(List<Usuario> usu) {
-        Scanner os = new Scanner(System.in);
-        Oso osito = new Oso(null,"Oso",65,"Carne, pescado y fruta",30,"Lanzar rafagas de hielo");
-                
-        System.out.println("Genial!!, has adoptado un feroz Oso");
-        System.out.println("Que nombre te gustaria darle?");
-        String nombree = os.nextLine();
-        osito.setNombre(nombree);
+        Oso osito = new Oso(null, "Oso", 65, "Carne, pescado y fruta", 30, "Lanzar rafagas de hielo");
+        System.out.println(Estilos.OK + Estilos.VERDE_B + " Has adoptado un feroz Oso!" + Estilos.RESET);
+        System.out.print(Estilos.PREGUNTA + " Que nombre le pondras? ");
+        osito.setNombre(sc.nextLine().trim());
         usu.get(0).agregarMascota(osito);
-                
-        System.out.println("Excelente, aqui estan los datos de tu nuevo amigo:");
-        System.out.println(ANSI_CYAN+"-----------------------------------------"+ANSI_RESET);
-        System.out.println("");
-        System.out.println("Nombre: "+osito.getNombre()+"\n"+"Especie: "+ osito.getEspecie() + "\n"
-                        +"Nivel de agresividad: "+ osito.getAgresividad()+ "\n"+ "Especificaciones de su dieta: " + osito.getDieta()+"\n"
-                        +"Años de vida: "+osito.getAniosVida()+"\n"+"Habilidad especial: "+osito.getHabilidad());
-        System.out.println("");
-        System.out.println(ANSI_CYAN+"-----------------------------------------"+ANSI_RESET);
-        
-        int accion=0;
-        Scanner acc = new Scanner(System.in);
-        do{
-            System.out.println(ANSI_YELLOW+"¿Que te gustaria hacer con tu nueva mascota?"+ANSI_RESET);
-            System.out.println("1. Alimentar");
-            System.out.println("2. Jugar");
-            System.out.println("3. Bañar");
-            System.out.println("4. Mostrar habilidad");
-            System.out.println("5. Salir");
-            System.out.println("");
-            
-            if (acc.hasNextInt()) {
-            accion=acc.nextInt();
-            }
-            else{
-                System.out.println("No es un número entero");
-                acc.next();
-            }
-            if (accion == 1) {
-                System.out.println("Muy bien!");
-                System.out.println("Has elegido alimentar a tu mascota"+"\n"
-                        +"Recuerda que los osos comen carne, pescado y fruta");
-                osito.Alimentar();
-                
-            }
-            if (accion == 2) {
-                System.out.println("Excelente");
-                System.out.println("Sube en el lomo de tu mascota y den un paseo");
-                osito.Jugar();
-            }
-            if (accion ==3) {
-                System.out.println("Por lo visto tu mascota esta bastante sucia, es hora del baño");
-                osito.Bañar();
-            }
-            if (accion == 4) {
-                System.out.println("Valla, asi que quieres que tu mascota muestre su habilidad...");
-                System.out.println("Esta bien, retrocede un poco, mientras tu mascota hace una demostración");
-                osito.activarHabilidad();
-            }
-            switch(accion){
-                case 5:
-                    return 0;
-            }
-            
-        }while(true);
-        
-    }
-
-    private static int pajaritito(List<Usuario> usu) {
-        Scanner pa = new Scanner(System.in);
-        Pajaro pajarito = new Pajaro(null,"Pajaro",10,"Semillas de girasol",20,"Prender en llamas");
-                
-        System.out.println("Genial!!, has adoptado un lindo Pajarito");
-        System.out.println("Que nombre te gustaria darle?");
-        String nombree = pa.nextLine();
-        pajarito.setNombre(nombree);
-        usu.get(0).agregarMascota(pajarito);
-                
-        System.out.println("Excelente, aqui estan los datos de tu nuevo amigo:");
-        System.out.println(ANSI_CYAN+"-----------------------------------------"+ANSI_RESET);
-        System.out.println("");
-        System.out.println("Nombre: "+pajarito.getNombre()+"\n"+"Especie: "+ pajarito.getEspecie() + "\n"
-                        +"Nivel de agresividad: "+ pajarito.getAgresividad()+ "\n"+ "Especificaciones de su dieta: " + pajarito.getDieta()+"\n"
-                        +"Años de vida: "+pajarito.getAniosVida()+"\n"+"Habilidad especial: "+pajarito.getHabilidad());
-        System.out.println("");
-        System.out.println(ANSI_CYAN+"-----------------------------------------"+ANSI_RESET);
-                
-        int accion=0;
-        Scanner acc = new Scanner(System.in);
-        do{
-            System.out.println(ANSI_YELLOW+"¿Que te gustaria hacer con tu nueva mascota?"+ANSI_RESET);
-            System.out.println("1. Alimentar");
-            System.out.println("2. Jugar");
-            System.out.println("3. Mostrar habilidad");
-            System.out.println("4. Salir");
-            System.out.println("");
-            
-            if (acc.hasNextInt()) {
-            accion=acc.nextInt();
-            }
-            else{
-                System.out.println("No es un número entero");
-                acc.next();
-            }
-            if (accion == 1) {
-                System.out.println("Muy bien!");
-                System.out.println("Has elegido alimentar a tu mascota"+"\n"
-                        +"Recuerda que los pajaros comen semillas de girasol");
-                pajarito.Alimentar();
-                
-            }
-            if (accion == 2) {
-                System.out.println("Excelente");
-                System.out.println("Corre y tu mascota emprendera el vuelo");
-                pajarito.Jugar();
-            }
-            if (accion == 3) {
-                System.out.println("Valla, asi que quieres que tu mascota muestre su habilidad...");
-                System.out.println("Esta bien, retrocede un poco, mientras tu mascota hace una demostración");
-                pajarito.activarHabilidad();
-            }
-            switch(accion){
+        mostrarFicha(osito);
+        int accion;
+        do {
+            menuAcciones(true);
+            accion = leerEntero(1, 5);
+            switch (accion) {
+                case 1:
+                    System.out.println(Estilos.INFO + " Los osos comen carne, pescado y fruta.");
+                    osito.Alimentar(); break;
+                case 2:
+                    System.out.println(Estilos.INFO + " Sube en su lomo y den un paseo por el bosque!");
+                    osito.Jugar(); break;
+                case 3:
+                    System.out.println(Estilos.INFO + " Hora del bano, llevalo al rio.");
+                    osito.Bañar(); break;
                 case 4:
-                    return 0;
+                    System.out.println(Estilos.INFO + " Retrocede... aqui viene la demostracion!");
+                    osito.activarHabilidad(); break;
+                case 5: return 0;
             }
-            
-        }while(true);
-                
+        } while (true);
     }
-
+ 
+    private static int pajaritito(List<Usuario> usu) {
+        Pajaro pajarito = new Pajaro(null, "Pajaro", 10, "Semillas de girasol", 20, "Prender en llamas");
+        System.out.println(Estilos.OK + Estilos.VERDE_B + " Has adoptado un lindo Pajarito!" + Estilos.RESET);
+        System.out.print(Estilos.PREGUNTA + " Que nombre le pondras? ");
+        pajarito.setNombre(sc.nextLine().trim());
+        usu.get(0).agregarMascota(pajarito);
+        mostrarFicha(pajarito);
+        int accion;
+        do {
+            menuAcciones(false);
+            accion = leerEntero(1, 4);
+            switch (accion) {
+                case 1:
+                    System.out.println(Estilos.INFO + " Los pajaros comen semillas de girasol.");
+                    pajarito.Alimentar(); break;
+                case 2:
+                    System.out.println(Estilos.INFO + " Corre! Tu pajaro emprendera el vuelo!");
+                    pajarito.Jugar(); break;
+                case 3:
+                    System.out.println(Estilos.INFO + " Retrocede... aqui viene la demostracion!");
+                    pajarito.activarHabilidad(); break;
+                case 4: return 0;
+            }
+        } while (true);
+    }
+ 
     private static int perritito(List<Usuario> usu) {
-        Scanner pe = new Scanner(System.in);
-        Perro perrito = new Perro(null,"Perro",5,"Croquetas",18,"Crecer 5 metros");
-                
-        System.out.println("Genial!!, has adoptado un tierno Perro");
-        System.out.println("Que nombre te gustaria darle?");
-        String nombree = pe.nextLine();
-        perrito.setNombre(nombree);
+        Perro perrito = new Perro(null, "Perro", 5, "Croquetas", 18, "Crecer 5 metros");
+        System.out.println(Estilos.OK + Estilos.VERDE_B + " Has adoptado un tierno Perro!" + Estilos.RESET);
+        System.out.print(Estilos.PREGUNTA + " Que nombre le pondras? ");
+        perrito.setNombre(sc.nextLine().trim());
         usu.get(0).agregarMascota(perrito);
-                
-        System.out.println("Excelente, aqui estan los datos de tu nuevo amigo:");
-        System.out.println(ANSI_CYAN+"-----------------------------------------"+ANSI_RESET);
-        System.out.println("");
-        System.out.println("Nombre: "+perrito.getNombre()+"\n"+"Especie: "+ perrito.getEspecie() + "\n"
-                        +"Nivel de agresividad: "+ perrito.getAgresividad()+ "\n"+ "Especificaciones de su dieta: " + perrito.getDieta()+"\n"
-                        +"Años de vida: "+perrito.getAniosVida()+"\n"+"Habilidad especial: "+perrito.getHabilidad());
-        System.out.println("");
-        System.out.println(ANSI_CYAN+"-----------------------------------------"+ANSI_RESET);
-        
-        int accion=0;
-        Scanner acc = new Scanner(System.in);
-        do{
-            System.out.println(ANSI_YELLOW+"¿Que te gustaria hacer con tu nueva mascota?"+ANSI_RESET);
-            System.out.println("1. Alimentar");
-            System.out.println("2. Jugar");
-            System.out.println("3. Bañar");
-            System.out.println("4. Mostrar habilidad");
-            System.out.println("5. Salir");
-            System.out.println("");
-            
-            if (acc.hasNextInt()) {
-            accion=acc.nextInt();
+        mostrarFicha(perrito);
+        int accion;
+        do {
+            menuAcciones(true);
+            accion = leerEntero(1, 5);
+            switch (accion) {
+                case 1:
+                    System.out.println(Estilos.INFO + " Los perros comen croquetas.");
+                    perrito.Alimentar(); break;
+                case 2:
+                    System.out.println(Estilos.INFO + " Agarra una pelota y lanzala!");
+                    perrito.Jugar(); break;
+                case 3:
+                    System.out.println(Estilos.INFO + " Prepara la manguera y el jabon!");
+                    perrito.Bañar(); break;
+                case 4:
+                    System.out.println(Estilos.INFO + " Retrocede... aqui viene la demostracion!");
+                    perrito.activarHabilidad(); break;
+                case 5: return 0;
             }
-            else{
-                System.out.println("No es un número entero");
-                acc.next();
-            }
-            if (accion == 1) {
-                System.out.println("Muy bien!");
-                System.out.println("Has elegido alimentar a tu mascota"+"\n"
-                        +"Recuerda que los perros comen croquetas");
-                perrito.Alimentar();
-                
-            }
-            if (accion == 2) {
-                System.out.println("Excelente");
-                System.out.println("Agarra una pelota y lanzala para que tu mascota vaya por ella");
-                perrito.Jugar();
-            }
-            if (accion ==3) {
-                System.out.println("Por lo visto tu mascota esta bastante sucia, es hora del baño");
-                perrito.Bañar();
-            }
-            if (accion == 4) {
-                System.out.println("Valla, asi que quieres que tu mascota muestre su habilidad...");
-                System.out.println("Esta bien, retrocede un poco, mientras tu mascota hace una demostración");
-                perrito.activarHabilidad();
-            }
-            switch(accion){
-                case 5:
-                    return 0;
-            }
-            
-        }while(true);
+        } while (true);
     }
-    
 }
-
+ 
